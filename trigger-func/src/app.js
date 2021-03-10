@@ -1,39 +1,37 @@
 'use strict';
 
 const express = require('express')
+const _ = require('lodash');
 
-// Constants
-const PORT = 3000;
-const HOST = '0.0.0.0';
+const config = {
+    // Cloud Run provides port via env var
+    port: process.env.PORT || 8080,
+};
 
 // App
 const app = express();
-
 app.use(express.json()); //Used to parse JSON bodies
-
 app.use(express.urlencoded()); //Parse URL-encoded bodies
-
-const application_port = process.env.PORT || PORT;
 
 app.get('/', (req, res) => {
     res.send('OK');
 })
 
-app.post('/', function (req, res) {
+app.post('/', async function (req, res) {
 
-    console.log("data >>", req.body);
+    const input = req.body;
 
-    if (!req.body) {
-        const msg = "No Request Body received";
-        console.error(`error: ${msg}`);
-        res.status(400).send(`Bad Request: ${msg}`);
+    console.log("input data >>", input);
+
+    if (_.isNil(input.feedback)) {
+        res.status(400).send(`Missing input param "feedback".`);
         return;
-    }
+      }
 
-    res.status(200).send({
-        status: "OK"
-    });
+    res.status(201).send();
+    
 })
 
-app.listen(application_port, HOST);
-console.log(`Trigger Func App us Running 🚀 on http://${HOST}:${PORT}`);
+app.listen(config.port, () => {
+    console.log(`trigger-func app listening 🚀at http://localhost:${config.port}`)
+});

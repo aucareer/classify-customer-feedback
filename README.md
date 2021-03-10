@@ -4,7 +4,7 @@
 
 ### 1. Create a new GCP project
 -------------------------------
-Create a new GCP project and link it to your billing account. Note down the PROJECT_ID
+Create a new GCP project and link it to your billing account. 
 
 ### 2. Setup gcloud 
 ----------------------------------
@@ -21,7 +21,7 @@ cd gcp-env
 
 ### 4. Setup Project environment
 ----------------------------------------
-To create project environment -run the following script. Provide $PROJECT_ID obtained in step 1. This will setup your cloud run environemnt, enable necessry services and creates two topics 
+To create project environment -run the following script. This will setup your cloud run environemnt, enable necessry services and creates two topics 
 
 ```sh
 cd gcp-env
@@ -30,7 +30,7 @@ cd gcp-env
 
 ### 5. Build the docker image
 ------------------------------------------
-Build the docker image.This script requires you to provide the PROJECT_ID
+Build the docker image.
 
 ```sh
 cd trigger-func
@@ -39,7 +39,7 @@ cd trigger-func
 
 ### 6. Deploy the service on cloud run
 ----------------------------------------
-Deploy the service..This script requires you to provide the PROJECT_ID
+Deploy the service.
 
 ```sh
 cd trigger-func
@@ -52,13 +52,13 @@ You should see the endpoint when script completes - URL
 Test the endpoint using curl script. you will find the URL as the o/p of step 6
 
 ```sh
-curl -d '{"name":"joe", "age":50}' -H "Content-Type: a
+curl -d '{"feedback":"good service"}' -H "Content-Type: a
 pplication/json" -X POST https://trigger-func-mcblwhygza-uc.a.run.app
 ```
 
 ### 8. Delete the service
 ------------------------------------------
-Delete the service. This script requires you to provide the PROJECT_ID
+Delete the service. 
 
 ```sh
 cd trigger-func

@@ -1,23 +1,16 @@
 #!/bin/bash
-echo -n "Enter the existing GCP project id to use and press [ENTER]: "
-read PROJECT_ID
-echo
+echo "Beginning environemnt teardown for the project"
 
+# Topic Names
 TOPIC_NAME_FEEDBACK_CREATED="feedback-created"
 TOPIC_NAME_FEEDBACK_CLASSIFIED="feedback-classified"
 
-echo "Cleaning up the google cloud environment"
+# Disabling prompts
+# https://cloud.google.com/sdk/docs/scripting-gcloud
 gcloud debug targets list --quiet
 
-echo "Deleting topics"
-gcloud pubsub topics delete $TOPIC_NAME_FEEDBACK_CREATED
-gcloud pubsub topics delete $TOPIC_NAME_FEEDBACK_CLASSIFIED
+echo "Deleting Pub/Sub Topics"
+# Delete Pub/Sub topics
+# (https://cloud.google.com/sdk/gcloud/reference/pubsub/topics/delete)
+gcloud pubsub topics delete $TOPIC_NAME_FEEDBACK_CREATED $TOPIC_NAME_FEEDBACK_CLASSIFIED
 
-
-#gcloud ices disable run.googleapis.com
-#gcloud services disable containerregistry.googleapis.com
-#gcloud services disable cloudbuild.googleapis.com
-
-echo "Unset projecta and run"
-gcloud config unset project
-#gcloud config unset run
