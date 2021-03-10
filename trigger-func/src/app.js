@@ -20,7 +20,16 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', function (req, res) {
-    console.log("data >>", req.body)
+
+    console.log("data >>", req.body);
+
+    if (!req.body) {
+        const msg = "No Request Body received";
+        console.error(`error: ${msg}`);
+        res.status(400).send(`Bad Request: ${msg}`);
+        return;
+    }
+
     res.status(200).send({
         status: "OK"
     });

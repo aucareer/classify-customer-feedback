@@ -1,4 +1,4 @@
-o -n "Enter the existing GCP project id to use and press [ENTER]: "
+echo -n "Enter the existing GCP project id to use and press [ENTER]: "
 read PROJECT_ID
 echo
 

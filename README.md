@@ -28,7 +28,7 @@ cd gcp-env
  ./setup-project-env.sh
 ```
 
-### 5. Build the doocker image
+### 5. Build the docker image
 ------------------------------------------
 Build the docker image.This script requires you to provide the PROJECT_ID
 
@@ -37,7 +37,7 @@ cd trigger-func
 ./build-service.sh
 ```
 
-### 6. Deploy the service
+### 6. Deploy the service on cloud run
 ----------------------------------------
 Deploy the service..This script requires you to provide the PROJECT_ID
 
@@ -45,11 +45,16 @@ Deploy the service..This script requires you to provide the PROJECT_ID
 cd trigger-func
 ./deploy-service.sh
 ```
+You should see the endpoint when script completes - URL
 
 ### 7. Test the endpoint
 ----------------------------------------
 Test the endpoint using curl script. you will find the URL as the o/p of step 6
 
+```sh
+curl -d '{"name":"joe", "age":50}' -H "Content-Type: a
+pplication/json" -X POST https://trigger-func-mcblwhygza-uc.a.run.app
+```
 
 ### 8. Delete the service
 ------------------------------------------

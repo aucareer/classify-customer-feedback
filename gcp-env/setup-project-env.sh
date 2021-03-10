@@ -10,11 +10,11 @@ REGION="us-central1"
 TOPIC_NAME_FEEDBACK_CREATED="feedback-created"
 TOPIC_NAME_FEEDBACK_CLASSIFIED="feedback-classified"
 
-echo "set up region"
-gcloud config set run/region $REGION
-
 echo "setup a project"
 gcloud config set project $PROJECT_ID
+
+echo "set up region"
+gcloud config set run/region $REGION
 
 echo "enable cloud run"
 gcloud services enable run.googleapis.com
