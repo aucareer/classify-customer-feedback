@@ -28,7 +28,7 @@ cd gcp-env
  ./setup-project-env.sh
 ```
 
-### 5. Build teh doocker image
+### 5. Build the doocker image
 ------------------------------------------
 Build the docker image.This script requires you to provide the PROJECT_ID
 
