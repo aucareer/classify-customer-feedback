@@ -4,12 +4,10 @@ const {PubSub} = require('@google-cloud/pubsub');
 
 const pubSubClient = new PubSub();
 
-process.env.GOOGLE_APPLICATION_CREDENTIALS = "config/fstore-ket.json";
-
-async function publishMessage(topicName, data) {
+async function publishMessage(topicName, message) {
    
     try {
-        const data = JSON.stringify(data);
+        const data = JSON.stringify(message);
         console.log("data: ", data);
         const dataBuffer = Buffer.from(data);
         
