@@ -4,22 +4,21 @@ const Firestore = require('@google-cloud/firestore');
 const {publishMessage } =  require('./pubsubManager');
 
 const TOPIC_FEEDBACK_CREATED = "feedback-created";
-const projectId = process.env.PROJECT_ID;
-const clientEmail = process.env.CLIENT_EMAIL;
-const authKey = process.env.AUTH_KEY;
+const projectId = process.env.PROJECT_ID || "k8sinc-project";
 
-console.log(`Creds ${projectId} - {clientEmail}`)
+// const firestoreCredentials = {
+//     client_email: clientEmail,
+//     private_key: authKey
+// };
 
-const firestoreCredentials = {
-    client_email: clientEmail,
-    private_key: authKey
-};
+// const db = new Firestore({
+//     projectId: projectId,
+//     keyFilename: 'config/fstore-key.json',
+//  });
 
-const db = new Firestore({
-    projectId: projectId,
-    credentials: firestoreCredentials
- });
-
+ const db = new Firestore();
+ console.log("db.....>>", db);
+ 
  const persistFeedbackToStore = async (feedbackText) => {
 
    const feedback = {
