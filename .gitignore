@@ -105,4 +105,5 @@ dist
 .tern-port
 
 trigger-func/config/sample.json
+trigger-func/config/fstore-key.json
 
