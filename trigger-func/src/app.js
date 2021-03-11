@@ -1,7 +1,9 @@
 'use strict';
 
-const express = require('express')
+const express = require('express');
 const _ = require('lodash');
+
+const { persistFeedbackToStore }= require('./firestoreRepository');
 
 const config = {
     // Cloud Run provides port via env var
@@ -15,21 +17,27 @@ app.use(express.urlencoded()); //Parse URL-encoded bodies
 
 app.get('/', (req, res) => {
     res.send('OK');
+   
 })
 
 app.post('/', async function (req, res) {
 
     const input = req.body;
-
-    console.log("input data >>", input);
+    
+    console.log('Processing feedback received :', input);
 
     if (_.isNil(input.feedback)) {
         res.status(400).send(`Missing input param "feedback".`);
         return;
-      }
+    }
 
-    res.status(201).send();
-    
+    try {
+      await persistFeedbackToStore(input.feedback);
+      res.status(201).send();
+    }catch(err){
+       res.status(500).send(`OOps something happend while persisting data.`);
+       return;
+    }
 })
 
 app.listen(config.port, () => {

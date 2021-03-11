@@ -75,6 +75,20 @@ cd gcp-env
 ```
 
 
+## Resources
+
+### Firestore
+-----------------------------------------------------
+https://firebase.google.com/docs/firestore/data-model
+
+https://firebase.google.com/docs/firestore/quickstart
+
+https://cloud.google.com/firestore/docs/quickstart-servers#node.js
+
+https://firebase.google.com/docs/firestore/solutions/automate-database-create
+
+
+
 
 
 
