@@ -1,0 +1,18 @@
+{
+  "name": "analysis-func",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/firestore": "^4.9.7",
+    "@google-cloud/pubsub": "^2.10.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21"
+  }
+}

@@ -87,8 +87,27 @@ https://cloud.google.com/firestore/docs/quickstart-servers#node.js
 
 https://firebase.google.com/docs/firestore/solutions/automate-database-create
 
+### Cloud Run
+https://cloud.google.com/run/docs/configuring/environment-variables#yaml
+https://cloud.google.com/docs/authentication/getting-started
+
+https://cloud.google.com/pubsub/docs/quickstart-client-libraries#pubsub-client-libraries-nodejs
+
+https://cloud.google.com/run/docs/tutorials/pubsub#integrating-pubsub
+https://cloud.google.com/appengine/docs/flexible/nodejs/writing-and-responding-to-pub-sub-messages
+
+https://cloud.google.com/run/docs/triggering/pubsub-push
+
+### Auto ML
+https://cloud.google.com/natural-language/automl/docs/quickstart
+
+https://cloud.google.com/vision/automl/object-detection/docs/quickstart
+https://cloud.google.com/iam/docs/creating-managing-service-accounts#iam-service-accounts-create-gcloud
 
 
+# Milestone 3
 
 
+Configuring PubSub with Function
+https://cloud.google.com/run/docs/tutorials/pubsub
 

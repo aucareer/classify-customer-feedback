@@ -4,7 +4,7 @@ const Firestore = require('@google-cloud/firestore');
 const {publishMessage } =  require('./pubsubManager');
 
 const TOPIC_FEEDBACK_CREATED = "feedback-created";
-const projectId = process.env.PROJECT_ID || "k8sinc-project";
+const projectId = process.env.PROJECT_ID || "customer-feedback-1";
 
 // const firestoreCredentials = {
 //     client_email: clientEmail,
@@ -33,6 +33,7 @@ const projectId = process.env.PROJECT_ID || "k8sinc-project";
   try {
     const res = await db.collection('feedbacks').add(feedback);
     console.log('Successfully perisisted feedback to firestore with ID: ', res.id);
+    feedback.docId = res.id;
     const messageId = await publishMessage(TOPIC_FEEDBACK_CREATED, feedback);
 
   }catch(err){

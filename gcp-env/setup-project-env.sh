@@ -31,8 +31,11 @@ gcloud services enable --project $PROJECT_ID \
   appengine.googleapis.com \
   language.googleapis.com \
   sheets.googleapis.com \
-  run.googleapis.com
+  run.googleapis.com \
+  automl.googleapis.com \
+  storage.googleapis.com
 
+  
 # App Engine is a requirement for using Firestore.
 # App Engine refers to the region as "us-central" right now.
 echo "Enabling App Engine and Firestore"
@@ -57,6 +60,23 @@ echo "Enabling Pub/Sub to create authentictaion token"
 gcloud projects add-iam-policy-binding $PROJECT_ID \
 	"--member=serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-pubsub.iam.gserviceaccount.com" \
 	--role=roles/iam.serviceAccountTokenCreator
+
+ #1 Create the service account
+echo "create service account"
+MY_SERVICE_ACCOUNT="au-service-account"
+gcloud iam service-accounts create $MY_SERVICE_ACCOUNT
+
+#2 Grant permissions to the service account
+echo "Granting permission to the service account"
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member="serviceAccount:${MY_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com" \
+ --role="roles/owner"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+   --member="serviceAccount:${MY_SERVICE_ACCOUNT}" \
+   --role="roles/automl.editor"
+
+
 
 # Enable Cloud Natural Language API (Milestone 3)
 echo "Enabling Cloud natural Language API"
