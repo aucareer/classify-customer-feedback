@@ -3,30 +3,30 @@
 const Firestore = require('@google-cloud/firestore');
 const {publishMessage } =  require('./pubsubManager');
 
-const TOPIC_FEEDBACK_CREATED = "feedback-created";
-const projectId = process.env.PROJECT_ID || "k8sinc-project";
+const projectId = process.env.PROJECT_ID || "customer-feedback-1";
 
 const db = new Firestore();
-console.log("db.....>>", db);
- 
+
 const updateFeedbackToStore = async (feedback) => {
 
-  if(feedback){
-    feedback.classified = true;
-    feedback.sentimentScore = 100,
-    feedback.sentimentMangnitude = 44,
-    classifiedAt = new Date(Date.now()).toISOString()
-  }
-   
+  if(!feedback) {
+      const error = new ReferenceError("feedback data not defined");
+      console.error('feedback data not presesnt : ', error);
+      throw err;
+    }
+    
   try {
-    const res = await db.collection('feedbacks').add(feedback);
-    console.log('Successfully perisisted feedback to firestore with ID: ', res.id);
-    const messageId = await publishMessage(TOPIC_FEEDBACK_CREATED, feedback);
 
+      const documentId = feedback.docId;
+      console.log('Document Id : ', documentId);
+
+      await db.collection('feedbacks').doc(documentId).update(feedback);
+      console.log('Successfully updated feedback to firestore with ID: ', documentId);
+    
   }catch(err){
-    console.error('Error occured while persisting feedback to firestore: ', err);
+    console.error('Error occured while updating feedback to firestore: ', err);
     throw err;
   }
 }
 
-module.exports = {persistFeedbackToStore};
+module.exports = {updateFeedbackToStore};
