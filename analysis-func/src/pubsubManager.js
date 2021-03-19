@@ -15,6 +15,7 @@ async function publishMessage(topicName, message) {
         const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
         console.log(`Message ${messageId} published.`);
         return messageId;
+        
     } catch (error) {
       console.error(`Received error while publishing: ${error.message}`);
       throw error;
