@@ -32,11 +32,13 @@ app.post('/', async function (req, res) {
     }
 
     try {
-      await persistFeedbackToStore(input.feedback);
+      const feedbackId = await persistFeedbackToStore(input.feedback);
       res.status(201).send();
+      return;
     }catch(err){
-       res.status(500).send(`OOps something happend while persisting data.`);
-       return;
+        console.error(`Error saving feedback:`, e);
+        res.status(500).send(`OOps something happend while persisting data.`);
+        return;
     }
 })
 

@@ -25,7 +25,7 @@ gcloud run deploy $APP_NAME \
   --memory "128Mi" \
   --max-instances 1 \
   --platform managed \
-  --allow-unauthenticated
+  --no-allow-unauthenticated
 
 # Needed to ensure this deploy gets 100% of traffic if traffic was manualy
 # adjusted for this service before.

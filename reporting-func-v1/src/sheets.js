@@ -55,10 +55,20 @@ const COLUMNS = [
 class SheetsHelper {
 
   constructor() {
-    this.sheetService = google.sheets('v4');
-    this.driveService = google.drive('v3');
+
+    this.sheetService = null;
   }
 
+  async init() {
+    
+    this.sheetService = new sheets_v4.Sheets({
+      auth: await (new google.auth.GoogleAuth({
+        scopes: [
+          'https://www.googleapis.com/auth/spreadsheets',
+        ],
+      })).getClient(),
+    });
+  }
     
    /**
    * Creates a test Spreadsheet.

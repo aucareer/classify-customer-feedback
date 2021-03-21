@@ -9,7 +9,7 @@ const config = {
 };
 
 const TOPIC_NAME_FEEDBACK_CLASSIFIED="feedback-classified";
-const {updateFeedbackToStore} = require('./firestoreRepository');
+const {updateFeedbackToStore, getFeedbackFromStore} = require('./firestoreRepository');
 const {publishMessage } =  require('./pubsubManager');
 const {analyzeFeedbackSentiment} = require('./sentimentAnalyzer');
 
@@ -26,48 +26,56 @@ app.get('/', (req, res) => {
 
 app.post('/', async function (req, res) {
     
-    
-    if (!req.body) {
-      const msg = 'no Pub/Sub message received';
-      console.error(`error: ${msg}`);
-      res.status(400).send(`Bad Request: ${msg}`);
-      return;
-    }
+    //1...Parse the message and extract feedbackId
+    console.log('1...Parsing the received message and extracting feedbackId');
+    const message = JSON.parse(Buffer.from(req.body.message.data, 'base64')
+      .toString('utf-8'));
+    console.log(`Received message:`, message);
 
-    if (!req.body.message) {
-      const msg = 'invalid Pub/Sub message format';
-      console.error(`error: ${msg}`);
-      res.status(400).send(`Bad Request: ${msg}`);
-      return;
-    }
-    
-    console.log( req.body);
-    const pubSubMessage = req.body.message;
-
-    const feedback_str = Buffer.from(pubSubMessage.data, 'base64').toString();
-    console.log(`feedback_str ${feedback_str}!`);
-    const feedback_obj = JSON.parse(feedback_str);
-    console.log(`Message Feedback Data ${feedback_obj}!`);
-    console.log(`Message ID ${pubSubMessage.messageId}!`);
+    // Ignore invalid messages (right now, there's nothing else we could do
+    // with them).
+    if (_.isNil(message.feedbackId)) {
+        console.log(`Invalid message received. Ignoring.`);
+        res.status(200).send();
+        return;
+      }
 
     try {
+  
+        // If message is valid, get feedback out of Firestore.
+        // (https://firebase.google.com/docs/firestore/query-data/get-data#node.js)
+        const feedbackId = message.feedbackId;
+        console.log('Parsed Feedback Id :', feedbackId);
 
-       //1 ..analyze sentiments
-       await analyzeFeedbackSentiment(feedback_obj);
-       console.log(`Successfully analyzed sentiments`);
-        
-       //2 .... update DB with the sentiments result
-       await updateFeedbackToStore(feedback_obj);
-       console.log('Successfully updated sentiment to firestore with ID');
+        //2...Read Feedback Data from FireStore
+        console.log('2...Reading Feedback Data from FireStore');
+        const feedbckObj = await getFeedbackFromStore(feedbackId)
 
-        //3...publish to the topic feedback-classified      
-        const messageId = await publishMessage(TOPIC_NAME_FEEDBACK_CLASSIFIED, feedback_obj);
+        //3....Analyze Sentiments using natural language API
+        console.log('3...Analyzing Sentiments using natural language API');
+        const sentimentResult = await analyzeFeedbackSentiment(feedbckObj);
+        console.log(`Successfully analyzed sentiments`);
+
+        //4.... update firestore with the sentiments result
+        console.log('4...updating firestore with the sentiments result');
+        const updatedFeedbackId = await updateFeedbackToStore(feedbackId, sentimentResult );
+        console.log('Successfully updated sentiment to firestore with ID: ',updatedFeedbackId);
+
+        //5...publish to mesage to the topic feedback-classified 
+        console.log('5...publish to mesage to the topic feedback-classified');     
+        const msg = {
+            classifiedFeedbackId: updatedFeedbackId,
+        };
+        const messageId = await publishMessage(TOPIC_NAME_FEEDBACK_CLASSIFIED, msg);
         console.error(`Published message to ${TOPIC_NAME_FEEDBACK_CLASSIFIED} with id ${messageId}`);
-      
-        res.status(204).send();
+
+        res.status(200).send();
    
     }catch(err){
-       res.status(500).send(`OOps something happend while analyzing sentiments.`);
+       console.log(`Error processing message:`, err);
+        //Send 200 (not 500) in case of error because right now we don't have a way to handle
+        //loops caused by Pub/Sub re-sending messages forever.
+       res.status(200).send();
        return;
     }
    

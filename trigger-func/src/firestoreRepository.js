@@ -27,15 +27,17 @@ const projectId = process.env.PROJECT_ID || "customer-feedback-1";
     classified: false,
     classifiedAt: new Date(Date.now()).toISOString(),
     sentimentScore: -1,
-    sentimentMangnitude: -1
+    sentimentMagnitude: -1
   };
 
   try {
     const res = await db.collection('feedbacks').add(feedback);
     console.log('Successfully perisisted feedback to firestore with ID: ', res.id);
     feedback.docId = res.id;
-    const messageId = await publishMessage(TOPIC_FEEDBACK_CREATED, feedback);
-
+    const feedbackIdObj = {};
+    feedbackIdObj.feedbackId = res.id;
+    const messageId = await publishMessage(TOPIC_FEEDBACK_CREATED, feedbackIdObj);
+    return messageId;
   }catch(err){
     console.error('Error occured while persisting feedback to firestore: ', err);
     throw err;

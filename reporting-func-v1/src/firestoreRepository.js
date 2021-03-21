@@ -1,8 +1,6 @@
 'use strict';
 
 const Firestore = require('@google-cloud/firestore');
-const {publishMessage } =  require('./pubsubManager');
-
 const projectId = process.env.PROJECT_ID || "customer-feedback-1";
 
 const db = new Firestore();
@@ -14,19 +12,9 @@ const updateFeedbackToStore = async (feedbackId,sentimentResult) => {
       console.error('sentimentResult data not presesnt : ', error);
       throw err;
     }
-
-    console.log('sentimentResult >> ',sentimentResult.score);
     
-    const obj = {
-      classified:true,
-      classifiedAt: new Date().toISOString(),
-      sentimentScore: sentimentResult.score,
-      sentimentMagnitude: sentimentResult.magnitude,
-    };
-
-    console.log("OBJ.....",obj)
   try {
-      await db.collection('feedbacks').doc(feedbackId).set({
+      await db.collection('feedbacks').doc(feedbackId).update({
         classified:true,
         classifiedAt: new Date().toISOString(),
         sentimentScore: sentimentResult.score,

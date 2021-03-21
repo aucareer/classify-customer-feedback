@@ -19,7 +19,7 @@ async function stubFeedbackSentiment(feedback) {
 
   async function analyzeFeedbackSentiment(feedback) {
 
-    console.log(`started sentiment analysis-------`)
+   console.log(`started sentiment analysis-------`)
    try {
 
         // Instantiates a client
@@ -36,15 +36,15 @@ async function stubFeedbackSentiment(feedback) {
       // Detects the sentiment of the text
       const [result] = await client.analyzeSentiment({document: document});
       const sentiment = result.documentSentiment;
-      console.log(`Sentiment score: ${sentiment.score}`);
-      console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+     
+      const sentimentResult = {
+        score:sentiment.score,
+        magnitude: sentiment.magnitude
+      }
 
-      feedback.classified = true;
-      feedback.sentimentScore = sentiment.score;
-      feedback.sentimentMangnitude = sentiment.magnitude,
-      feedback.classifiedAt = new Date(Date.now()).toISOString();
-
+      console.log(`Sentiment Result: ${sentimentResult.score} :  ${sentimentResult.mangnitude}`);
       console.log(`succesfully completed sentiment analysis-------`);
+      return sentimentResult;
       
       } catch (error) {
         console.error(`Received error while analyzing feedback sentiment: ${error.message}`);

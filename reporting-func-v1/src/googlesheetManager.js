@@ -1,20 +1,8 @@
 'use strict';
 
-const {SheetsHelper} = require('./sheets');
-const sheetHelper  = new SheetsHelper();
+const { google, sheets_v4 } = require('googleapis');
 
-let ModelGCP =   {
-  id: '16_gIqUec7KHlVEkCU8Q30tWGr9tb8eAupMtvfvLFBJ8',
-  sheetId: 703163549,
-  name: 'test-feedback-2'
-};
-
-let Model =   {
-  id: '1Ka1wYgSHgTEUaqcxIi64rqmvDy2hwRelxdHFXjGnc3M',
-  name: 'Customer Feedback'
-};
-
-const updateGoogleSheet = async (feedback) => {
+const updateGoogleSheet = async (sheetId, feedback) => {
 
   if(!feedback) {
     const error = new ReferenceError("feedback data not defined");
@@ -23,16 +11,48 @@ const updateGoogleSheet = async (feedback) => {
   }
       
   try {
-        const valueRows = [];
-        valueRows.push(feedback);
+
+    const sheets = new sheets_v4.Sheets({
+      auth: await (new google.auth.GoogleAuth({
+        scopes: [
+          'https://www.googleapis.com/auth/spreadsheets',
+        ],
+      })).getClient(),
+    });
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId,
+      // using the sheet name for range will append to the bottom of the sheet
+      range: 'Data',
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      valueInputOption:'USER_ENTERED',
+      resource: {
+        // Each value is a row, which is an array of cells left to right
+        values: [
+          [
+            feedback.createdAt,
+            feedback.feedback,
+            feedback.classified,
+            feedback.classifiedAt,
+            feedback.sentimentScore,
+            feedback.sentimentMagnitude,
+            'v1'
+          ],
+        ],
+      },
+    });
+    console.log('Appended classified feedback row to sheet.');
+        // const valueRows = [];
+        // valueRows.push(feedback);
        
-        const messge = await sheetHelper.syncAppend(Model.id,valueRows);
-        console.log('Successfully updated feedback to google sheet message ', messge);
+        // const sheetHelper  = new SheetsHelper();
+        // const messge = await sheetHelper.syncAppend(sheetId,valueRows);
+        // console.log('Successfully updated feedback to google sheet message ', messge);
       
     }catch(err){
       console.error('Error occured while updating google sheet : ', err);
       throw err;
     }
   }
-
   module.exports = {updateGoogleSheet};
