@@ -62,7 +62,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 	--role=roles/iam.serviceAccountTokenCreator
 
  #1 Create the service account
-echo "create service account"
+echo "creating the service account"
 MY_SERVICE_ACCOUNT="au-service-account"
 gcloud iam service-accounts create $MY_SERVICE_ACCOUNT
 
@@ -72,10 +72,11 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
  --member="serviceAccount:${MY_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com" \
  --role="roles/owner"
 
+#3 Grant permissions to the service account
+echo "Granting automl role to the service account"
 gcloud projects add-iam-policy-binding $PROJECT_ID \
    --member="serviceAccount:${MY_SERVICE_ACCOUNT}" \
    --role="roles/automl.editor"
-
 
 
 # Enable Cloud Natural Language API (Milestone 3)
