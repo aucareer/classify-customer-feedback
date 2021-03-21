@@ -28,26 +28,43 @@ cd gcp-env
  ./setup-project-env.sh
 ```
 
-### 5. Build the docker image
-------------------------------------------
-Build the docker image.
-
-```sh
-cd trigger-func
-./build-service.sh
-```
-
-### 6. Deploy the service on cloud run
+### 5. Setup Pub/Sub Subscriptions
 ----------------------------------------
-Deploy the service.
+To create various pub/sub subscriptions and realted permissions -run the following script. 
+
+```sh
+cd gcp-env
+ ./setup-pubsub-subscriptions.sh
+```
+
+
+### 5.  trigger function -> Build and deploy the docker image to cloud run
+------------------------------------------
+Build and deploy the docker image.
 
 ```sh
 cd trigger-func
-./deploy-service.sh
+./build-and-deploy-service.sh
 ```
-You should see the endpoint when script completes - URL
 
-### 7. Test the endpoint
+### 6.  analysis function -> Build and deploy the docker image to cloud run
+------------------------------------------
+Build and deploy the docker image.
+
+```sh
+cd analysis-func
+./build-and-deploy-service.sh
+```
+
+### 7.  reporting-func-v1 -> Build and deploy the docker image to cloud run
+------------------------------------------
+Build and deploy the docker image.
+
+```sh
+cd reporting-func-v1
+./build-and-deploy-service.sh
+
+### 9. Test the endpoint
 ----------------------------------------
 Test the endpoint using curl script. you will find the URL as the o/p of step 6
 
@@ -56,16 +73,7 @@ curl -d '{"feedback":"good service"}' -H "Content-Type: a
 pplication/json" -X POST https://trigger-func-mcblwhygza-uc.a.run.app
 ```
 
-### 8. Delete the service
-------------------------------------------
-Delete the service. 
-
-```sh
-cd trigger-func
-./ delete-service.sh
-```
-
-### 9. Teardown the project environment
+### 10. Teardown the project environment
 ------------------------------------------
 Teardown the environemnt
 
