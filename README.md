@@ -28,52 +28,65 @@ cd gcp-env
  ./setup-project-env.sh
 ```
 
-### 5. Setup Pub/Sub Subscriptions
+### 5. Build and Deploy Trigger Func Service
 ----------------------------------------
-To create various pub/sub subscriptions and realted permissions -run the following script. 
-
-```sh
-cd gcp-env
- ./setup-pubsub-subscriptions.sh
-```
-
-
-### 5.  trigger function -> Build and deploy the docker image to cloud run
-------------------------------------------
-Build and deploy the docker image.
+Build and deploy trigger-func service to cloud run.
 
 ```sh
 cd trigger-func
 ./build-and-deploy-service.sh
 ```
 
-### 6.  analysis function -> Build and deploy the docker image to cloud run
+### 6.  Build and Deploy Analysis Func Service 
 ------------------------------------------
-Build and deploy the docker image.
+First setup pub/sub subscriptions for service and then
+Build and Deploy Analysis Func Service to cloud run
 
 ```sh
 cd analysis-func
+./create_subscription.sh
 ./build-and-deploy-service.sh
 ```
 
-### 7.  reporting-func-v1 -> Build and deploy the docker image to cloud run
+### 7.  Build and Deploy Reporting Func v1 Service 
 ------------------------------------------
-Build and deploy the docker image.
+First setup pub/sub subscriptions for service and then
+Build and Deploy Reporting Func Service to cloud run
 
 ```sh
-cd reporting-func-v1
+ cd reporting-func-v1
+./create_subscription.sh
 ./build-and-deploy-service.sh
+```
 
-### 9. Test the endpoint
+### 8.  Build and Deploy Reporting Func v2 Service 
+------------------------------------------
+Build and Deploy Reporting Func Service to cloud run
+
+```sh
+ cd reporting-func-v2
+./build-and-deploy-service.sh
+```
+### 9.  Split the traffic between v1 and v2 
+------------------------------------------
+Change the appropriate % between v1 and v2 by editing the file.
+Make sure the sh has the correct permissions
+
+```sh
+ cd reporting-func-v2
+./split-traffic.sh
+```
+
+### 10. Test the endpoint
 ----------------------------------------
-Test the endpoint using curl script. you will find the URL as the o/p of step 6
+Test the endpoint using curl script. you will find the URL as the o/p of step 4
 
 ```sh
 curl -d '{"feedback":"good service"}' -H "Content-Type: a
 pplication/json" -X POST https://trigger-func-mcblwhygza-uc.a.run.app
 ```
 
-### 10. Teardown the project environment
+### 11. Teardown the project environment
 ------------------------------------------
 Teardown the environemnt
 
@@ -81,6 +94,20 @@ Teardown the environemnt
 cd gcp-env
 ./teardown-project-env.sh
 ```
+
+## CI CD 
+----------------------------------------------
+The .github/workflows folder has all the github action workflow
+
+### cicd-trigger-func.yml 
+deploys trigger-func service automatically whenever there is any change in the folder /trigger-func
+
+### cicd-analysis-func.yml 
+deploys analysis-func service automatically whenever there is any change in the folder /analysis-func
+
+### cicd-reporting-func-v2.yml 
+deploys reporting-func service automatically whenever there is any change in the folder /reporting-func-v2
+
 
 
 ## Resources
