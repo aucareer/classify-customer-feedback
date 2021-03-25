@@ -21,7 +21,10 @@ jobs:
       with:
         project_id: ${{ env.PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-
+    - name: set defaults
+      run: |-
+        gcloud config set run/platform managed
+        gcloud config set run/region us-central1
     - name: Authorize Docker push
       run: gcloud auth configure-docker
     - name: Build and Push Container
