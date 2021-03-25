@@ -25,9 +25,9 @@ jobs:
     - name: Authorize Docker push
       run: gcloud auth configure-docker
     - name: Move to the project Dir
-      run: |-
-        pwd
-        cd /test-default-cred
+      run: |
+        ls
+        cd test-default-cred
         pwd
     - name: Build and Push Container
       run: |-
