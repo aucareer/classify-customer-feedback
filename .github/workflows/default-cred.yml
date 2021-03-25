@@ -24,13 +24,9 @@ jobs:
 
     - name: Authorize Docker push
       run: gcloud auth configure-docker
-    - name: Move to the project Dir
-      run: |
-        ls
-        cd test-default-cred
-        pwd
     - name: Build and Push Container
       run: |-
+        cd test-default-cred
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         
