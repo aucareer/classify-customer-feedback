@@ -10,7 +10,7 @@ on:
 env:
   PROJECT_ID: ${{secrets.GCP_PROJECT}}
   SERVICE: trigger-func
-  REGION: us-central1
+  REGION: ${{secrets.GCP_DEFAULT_REGION}}
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
         echo $REGION
         gcloud config set project $PROJECT_ID
         gcloud config set run/platform managed
-        gcloud config set run/$REGION
+        gcloud config set run/region $REGION
     - name: Authorize Docker push
       run: gcloud auth configure-docker
     - name: Build and Push Container
