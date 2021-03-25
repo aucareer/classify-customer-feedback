@@ -82,5 +82,5 @@ app.post('/', async function (req, res) {
 });
 
 app.listen(config.port, () => {
-    console.log(`analysis-func app listening 🚀at http://localhost:${config.port}`)
+    console.log(`analysis-func app cicd listening 🚀at http://localhost:${config.port}`)
 });

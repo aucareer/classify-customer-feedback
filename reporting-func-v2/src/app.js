@@ -73,5 +73,5 @@ app.post('/', async function (req, res) {
 });
 
 app.listen(config.port, () => {
-    console.log(`reporting-func-v1 app listening at 🚀at http://localhost:${config.port}`)
+    console.log(`reporting-func-v1 app listening cicd at 🚀at http://localhost:${config.port}`)
 });

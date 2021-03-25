@@ -1,11 +1,10 @@
 name: Build and Deploy Trigger-Func Service to Cloud Run
 on: 
-  workflow_dispatch:
-#   push:
-#      branches:
-#      - main
-#      paths:
-#       - trigger-func/**
+  push:
+     branches:
+     - main
+     paths:
+      - trigger-func/**
 
 env:
   PROJECT_ID: ${{secrets.GCP_PROJECT}}
