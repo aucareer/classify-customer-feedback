@@ -1,13 +1,15 @@
-name: Build and Deploy Trigger Func to Cloud Run
-on: workflow_dispatch
-  # push:
-  #   branches:
-  #   - example
+name: Build and Deploy Trigger-Func Service to Cloud Run
+on: 
+  push:
+     branches:
+     - main
+     paths:
+      - trigger-func/**
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  PROJECT_ID: ${{secrets.GCP_PROJECT}}
   SERVICE: trigger-func
-  REGION: us-central1
+  REGION: ${{secrets.GCP_DEFAULT_REGION}}
 
 jobs:
   deploy:
@@ -25,7 +27,7 @@ jobs:
       run: |-
         gcloud config set project $PROJECT_ID
         gcloud config set run/platform managed
-        gcloud config set run/region us-central1
+        gcloud config set run/$REGION
     - name: Authorize Docker push
       run: gcloud auth configure-docker
     - name: Build and Push Container
