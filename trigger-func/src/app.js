@@ -43,5 +43,5 @@ app.post('/', async function (req, res) {
 })
 
 app.listen(config.port, () => {
-    console.log(`trigger-func app listening CICD 🚀at http://localhost:${config.port}`)
+    console.log(`trigger-func app listening cicd 🚀at http://localhost:${config.port}`)
 });

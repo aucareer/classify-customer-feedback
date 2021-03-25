@@ -26,6 +26,7 @@ jobs:
     - name: set defaults
       run: |-
         echo $PROJECT_ID
+        echo $REGION
         gcloud config set project $PROJECT_ID
         gcloud config set run/platform managed
         gcloud config set run/$REGION
